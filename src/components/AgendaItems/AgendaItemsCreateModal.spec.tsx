@@ -361,7 +361,7 @@ describe('AgendaItemsCreateModal', () => {
     const input = within(autocomplete).getByRole('combobox');
     fireEvent.mouseDown(input);
 
-    const options = await screen.getAllByRole('option');
+    const options = screen.getAllByRole('option');
     expect(options).toHaveLength(mockAgendaItemCategories.length);
 
     fireEvent.click(options[0]);
