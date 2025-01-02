@@ -126,4 +126,24 @@ describe('Volunteer Management', () => {
     const groupsTab = screen.getByTestId('groupsTab');
     expect(groupsTab).toBeInTheDocument();
   });
+  test('Component should highlight the selected tab', async () => {
+    renderVolunteerManagement();
+
+    const upcomingEventsBtn = screen.getByTestId('upcomingEventsBtn');
+    const invitationsBtn = screen.getByTestId('invitationsBtn');
+    // Click the invitations tab
+    userEvent.click(invitationsBtn);
+    await waitFor(() => {
+      expect(invitationsBtn).toHaveClass('btn-success');
+      expect(upcomingEventsBtn).not.toHaveClass('btn-success');
+    });
+  });
+  test('should update the component state on tab switch', async () => {
+    renderVolunteerManagement();
+
+    const actionsBtn = screen.getByTestId('actionsBtn');
+    userEvent.click(actionsBtn);
+    const actionsTab = screen.getByTestId('actionsTab');
+    expect(actionsTab).toBeInTheDocument();
+  });
 });
