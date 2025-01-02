@@ -128,6 +128,7 @@ describe('Volunteer Management', () => {
   });
   test('Component should highlight the selected tab', async () => {
     renderVolunteerManagement();
+
     const upcomingEventsBtn = screen.getByTestId('upcomingEventsBtn');
     const invitationsBtn = screen.getByTestId('invitationsBtn');
     // Click the invitations tab
@@ -136,25 +137,32 @@ describe('Volunteer Management', () => {
       expect(invitationsBtn).toHaveClass('btn-success');
       expect(upcomingEventsBtn).not.toHaveClass('btn-success');
     });
+    
   });
   test('should update the component state on tab switch', async () => {
     renderVolunteerManagement();
+
     const actionsBtn = screen.getByTestId('actionsBtn');
     userEvent.click(actionsBtn);
     const actionsTab = screen.getByTestId('actionsTab');
     expect(actionsTab).toBeInTheDocument();
+
   });
   test('should render correct component for each tab', async () => {
     renderVolunteerManagement();
+
     const upcomingEventsTab = screen.getByTestId('upcomingEventsTab');
     expect(upcomingEventsTab).toBeInTheDocument();
+
     const invitationsBtn = screen.getByTestId('invitationsBtn');
     userEvent.click(invitationsBtn);
     const invitationsTab = screen.getByTestId('invitationsTab');
     expect(invitationsTab).toBeInTheDocument();
+
     const actionsBtn = screen.getByTestId('actionsBtn');
     userEvent.click(actionsBtn);
     const actionsTab = screen.getByTestId('actionsTab');
     expect(actionsTab).toBeInTheDocument();
+
   });
 });
