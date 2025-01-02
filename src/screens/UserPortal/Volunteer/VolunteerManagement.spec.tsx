@@ -13,6 +13,7 @@ import userEvent from '@testing-library/user-event';
 import { MOCKS } from './UpcomingEvents/UpcomingEvents.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
 const { setItem } = useLocalStorage();
 
 const link1 = new StaticMockLink(MOCKS);
@@ -43,10 +44,13 @@ const renderVolunteerManagement = (): RenderResult => {
 
 describe('Volunteer Management', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom'); // Import the actual implementation
+      return {
+        ...actual,
+        useParams: () => ({ orgId: 'orgId' }),
+      };
+    });
   });
 
   beforeEach(() => {
@@ -54,10 +58,11 @@ describe('Volunteer Management', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    setItem('userId', null);
     render(
       <MockedProvider addTypename={false}>
         <MemoryRouter initialEntries={['/user/volunteer/']}>
