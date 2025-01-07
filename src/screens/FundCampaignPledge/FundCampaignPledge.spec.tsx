@@ -3,7 +3,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
 import {
-  cleanup,
+  // cleanup,
   fireEvent,
   render,
   screen,
@@ -24,18 +24,20 @@ import {
 } from './PledgesMocks';
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
+import { vi } from 'vitest';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
-jest.mock('@mui/x-date-pickers/DateTimePicker', () => {
+vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
+  const actual = await vi.importActual(
+    '@mui/x-date-pickers/DesktopDateTimePicker',
+  );
   return {
-    DateTimePicker: jest.requireActual(
-      '@mui/x-date-pickers/DesktopDateTimePicker',
-    ).DesktopDateTimePicker,
+    DateTimePicker: actual.DesktopDateTimePicker,
   };
 });
 
@@ -75,14 +77,14 @@ const renderFundCampaignPledge = (link: ApolloLink): RenderResult => {
 
 describe('Testing Campaign Pledge Screen', () => {
   beforeAll(() => {
-    jest.mock('react-router-dom', () => ({
-      ...jest.requireActual('react-router-dom'),
+    vi.mock('react-router-dom', () => ({
+      ...vi.importActual('react-router-dom'),
       useParams: () => ({ orgId: 'orgId', fundCampaignId: 'fundCampaignId' }),
     }));
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
